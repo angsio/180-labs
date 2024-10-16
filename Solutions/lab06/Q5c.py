@@ -56,19 +56,57 @@ def valid(board, move):
         else:
             return True
 
+def check_winner(board):
+    # ROWS
+    for row in board:
+        if row[0] == row[1] == row[2] and row[0] != " ":
+            return row[0]
+
+    # COLUMNS
+    for col in range(3):
+        if board[0][col] == board[1][col] == board[2][col] and board[0][col] != " ":
+            return board[0][col]
+
+    # DIAGONALS
+    if board[0][0] == board[1][1] == board[2][2] and board[0][0] != " ":
+        return board[0][0]
+    
+    if board[0][2] == board[1][1] == board[2][0] and board[0][2] != " ":
+        return board[0][2]
+    
+    return None
+
 if __name__ == '__main__':
     board = make_empty_board()
-    
     for i in range(4):
         # Computer goes first
         make_random_move(board, "O")
         print_board_and_legend(board)
+        # Check if computer wins
+        winner = check_winner(board)
+        if winner:
+            print(f"{winner} wins.")
+            break
 
         # User goes second
-        move = input("Enter a move:")
+        move = input("Enter a move: ")
         while not valid(board, move):
             print("Invalid input.")
-            move = input("Enter a move:")
+            move = input("Enter a move: ")
         put_in_board(board, "X", int(move))
-    make_random_move(board, "O")
-    print_board_and_legend(board)
+        # Check if user wins
+        print_board_and_legend(board)
+        winner = check_winner(board)
+        if winner:
+            print(f"{winner} wins.")
+            break
+
+    # If no winner yet, let the computer make one final move
+    if not winner:
+        make_random_move(board, "O")
+        print_board_and_legend(board)
+        winner = check_winner(board)
+        if winner:
+            print(f"{winner} wins.")
+        else:
+            print("Tie.")
