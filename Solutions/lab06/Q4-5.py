@@ -7,8 +7,6 @@
 '''
 
 import random
-
-
 def print_board_and_legend(board):
     for i in range(3):
         line1 = " " +  board[i][0] + " | " + board[i][1] + " | " +  board[i][2]
@@ -17,8 +15,6 @@ def print_board_and_legend(board):
         if i < 2:
             print("---+---+---" + " "*5 + "---+---+---")
         
-    
-    
 def make_empty_board():
     board = []
     for i in range(3):
