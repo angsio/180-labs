@@ -1,6 +1,3 @@
-from xmlrpc.client import FastMarshaller
-
-
 def list1_sw_list2(L1, L2):
     if len(L2) > len(L1):
         return False

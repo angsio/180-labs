@@ -12,6 +12,7 @@ def lists_are_the_same(L1, L2):
 L1 = [1, 2, 3]
 L2 = [1, 2, 3]
 print(lists_are_the_same(L1, L2))
+
 L1 = [1, 2, 3]
 L2 = [2, 2, 3]
 print(lists_are_the_same(L1, L2))
