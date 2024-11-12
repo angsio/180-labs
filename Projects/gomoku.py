@@ -56,11 +56,44 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
 
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
-    return open_seq_count, semi_open_seq_count
+    open_seq_count, semi_open_seq_count = 0, 0
+
+    for i in range(len(board) - length + 1):
+
+        valid_segment = True
+        for j in range(length):
+            if board[y_start + i*d_y + j*d_y][x_start + i*d_x + j*d_x] != col:
+                valid_segment = False
+                break
+        
+        if valid_segment:
+
+            y_end = y_start + i*d_y + length - 1
+            x_end = x_start + i*d_x + length - 1
+
+            status = is_bounded(board, y_end, x_end, length, d_y, d_x)
+            if status == "OPEN":
+                open_seq_count += 1
+            elif status == "SEMIOPEN":
+                semi_open_seq_count += 1
+
+    return (open_seq_count, semi_open_seq_count)
+        
+
     
 def detect_rows(board, col, length):
-    ####CHANGE ME
     open_seq_count, semi_open_seq_count = 0, 0
+
+    for row in range(len(board)):
+        row_counts = detect_row(board, col, row, 0, length, 0, 1)
+        open_seq_count += row_counts[0]
+        semi_open_seq_count += row_counts[1]
+    
+    for column in range(len(board[0])):
+        row_counts = detect_row(board, col, 0, column, length, 1, 0)
+        open_seq_count += row_counts[0]
+        semi_open_seq_count += row_counts[1]
+
     return open_seq_count, semi_open_seq_count
     
 def search_max(board):
@@ -118,15 +151,12 @@ def print_board(board):
     
     print(s)
     
-
 def make_empty_board(sz):
     board = []
     for i in range(sz):
         board.append([" "]*sz)
     return board
                 
-
-
 def analysis(board):
     for c, full_name in [["b", "Black"], ["w", "White"]]:
         print("%s stones" % (full_name))
@@ -162,10 +192,6 @@ def play_gomoku(board_size):
         if game_res in ["White won", "Black won", "Draw"]:
             return game_res
             
-            
-        
-        
-        
         print("Your move:")
         move_y = int(input("y coord: "))
         move_x = int(input("x coord: "))
@@ -184,110 +210,6 @@ def put_seq_on_board(board, y, x, d_y, d_x, length, col):
         board[y][x] = col        
         y += d_y
         x += d_x
-
-
-def test_is_empty():
-    board  = make_empty_board(8)
-    if is_empty(board):
-        print("TEST CASE for is_empty PASSED")
-    else:
-        print("TEST CASE for is_empty FAILED")
-
-def test_is_bounded():
-    # Test case 1
-    board = make_empty_board(8)
-    x = 5; y = 1; d_x = 0; d_y = 1; length = 3
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    
-    y_end = 3
-    x_end = 5
-
-    if is_bounded(board, y_end, x_end, length, d_y, d_x) == 'OPEN':
-        print("TEST CASE for is_bounded PASSED")
-    else:
-        print("TEST CASE for is_bounded FAILED")
-
-    # Test Case 2
-    board = make_empty_board(8)
-    x = 0; y = 0; d_x = 1; d_y = 0; length = 5
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    
-    y_end = 0
-    x_end = 4
-
-    if is_bounded(board, y_end, x_end, length, d_y, d_x) == 'SEMIOPEN':
-        print("TEST CASE for is_bounded PASSED")
-    else:
-        print("TEST CASE for is_bounded FAILED")
-
-    # Test Case 3
-    board = make_empty_board(8)
-    x = 0; y = 0; d_x = 1; d_y = 0; length = 8
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    
-    y_end = 0
-    x_end = 7
-
-    if is_bounded(board, y_end, x_end, length, d_y, d_x) == 'CLOSED':
-        print("TEST CASE for is_bounded PASSED")
-    else:
-        print("TEST CASE for is_bounded FAILED")
-    
-    # Test Case 4
-    board = make_empty_board(8)
-    x = 1; y = 0; d_x = 1; d_y = 1; length = 3
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    
-    y_end = 2
-    x_end = 3
-
-    if is_bounded(board, y_end, x_end, length, d_y, d_x) == 'SEMIOPEN':
-        print("TEST CASE for is_bounded PASSED")
-    else:
-        print("TEST CASE for is_bounded FAILED")
-
-    # Test Case 4
-    board = make_empty_board(8)
-    x = 1; y = 0; d_x = 1; d_y = 1; length = 7
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    
-    y_end = 6
-    x_end = 7
-
-    if is_bounded(board, y_end, x_end, length, d_y, d_x) == 'CLOSED':
-        print("TEST CASE for is_bounded PASSED")
-    else:
-        print("TEST CASE for is_bounded FAILED")
-    
-    # Test Case 5
-    board = make_empty_board(8)
-    x = 3; y = 2; d_x = -1; d_y = 1; length = 4
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    
-    y_end = 5
-    x_end = 0
-
-    if is_bounded(board, y_end, x_end, length, d_y, d_x) == 'SEMIOPEN':
-        print("TEST CASE for is_bounded PASSED")
-    else:
-        print("TEST CASE for is_bounded FAILED")
-
-
-def test_detect_row():
-    board = make_empty_board(8)
-    x = 5; y = 1; d_x = 0; d_y = 1; length = 3
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    if detect_row(board, "w", 0,x,length,d_y,d_x) == (1,0):
-        print("TEST CASE for detect_row PASSED")
-    else:
-        print("TEST CASE for detect_row FAILED")
 
 def test_detect_rows():
     board = make_empty_board(8)
@@ -439,3 +361,4 @@ def some_tests():
 if __name__ == '__main__':
     test_is_empty()
     test_is_bounded()
+    test_detect_row()
