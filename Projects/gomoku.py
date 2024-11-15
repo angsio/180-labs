@@ -56,28 +56,107 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
 
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
-    open_seq_count, semi_open_seq_count = 0, 0
+    # available tools: is bounded
+    opens, semis = 0, 0
 
-    for i in range(len(board) - length + 1):
+    row = []
+    for i in range(len(board)):
 
-        valid_segment = True
-        for j in range(length):
-            if board[y_start + i*d_y + j*d_y][x_start + i*d_x + j*d_x] != col:
-                valid_segment = False
-                break
+        # Checks if out of bounds
+        if y_start + i*d_y >= len(board):
+            break
         
-        if valid_segment:
+        elif x_start + i*d_x >= len(board) or x_start + i*d_x == -1:
+            break
+            
+        row.append(board[y_start + i*d_y][x_start + i*d_x])
 
-            y_end = y_start + i*d_y + length - 1
-            x_end = x_start + i*d_x + length - 1
+    # Row is the row to be checked for sequences.
+    instances = [0]*len(row)
 
-            status = is_bounded(board, y_end, x_end, length, d_y, d_x)
-            if status == "OPEN":
-                open_seq_count += 1
-            elif status == "SEMIOPEN":
-                semi_open_seq_count += 1
+    chain = False
+    for i in range(1, len(row) - length):
+        if chain == False and row[i + length] != col and row[i - 1] != col:
+            if row[i:i + length] == [col]*length:
+                instances[i] = 1
+                chain = True
+        else:
+            if row[i + length - 1] != col:
+                chain = False
+    
+    if row[:length] == [col]*length and row[length] != col:
+        instances[0] = 1
+    if row[-length:] == [col]*length and row[-length - 1] != col:
+        instances[-length] = 1
 
-    return (open_seq_count, semi_open_seq_count)
+    print(row)
+    print(instances)
+
+    # is_bounded(board, y_end, x_end, length, d_y, d_x)
+    for i in range(len(instances)):
+        if instances[i] == 1:
+            y_end = y_start + length*d_y + (i - 1)*d_y
+            x_end = x_start + length*d_x + (i - 1)*d_x
+            res = is_bounded(board, y_end, x_end, length, d_y, d_x)
+            print(res)
+            if res == "OPEN":
+                opens += 1
+            elif res == "SEMIOPEN":
+                semis += 1
+     
+    return (opens, semis)
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    # open_seq_count, semi_open_seq_count = 0, 0
+
+    # for i in range(len(board) - length + 1):
+
+    #     valid_segment = True
+    #     for j in range(length):
+    #         if board[y_start + i*d_y + j*d_y][x_start + i*d_x + j*d_x] != col:
+    #             valid_segment = False
+    #             break
+        
+    #     if valid_segment:
+
+    #         y_end = y_start + i*d_y + length - 1
+    #         x_end = x_start + i*d_x + length - 1
+
+    #         status = is_bounded(board, y_end, x_end, length, d_y, d_x)
+    #         if status == "OPEN":
+    #             open_seq_count += 1
+    #         elif status == "SEMIOPEN":
+    #             semi_open_seq_count += 1
+
+    # return (open_seq_count, semi_open_seq_count)
+
+    
+
         
 
     
@@ -354,11 +433,3 @@ def some_tests():
     #        Semi-open rows of length 4: 0
     #        Open rows of length 5: 0
     #        Semi-open rows of length 5: 0
-
-
-  
-            
-if __name__ == '__main__':
-    test_is_empty()
-    test_is_bounded()
-    test_detect_row()

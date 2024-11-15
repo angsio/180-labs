@@ -10,10 +10,10 @@ def test_detect_row():
     put_seq_on_board(board, y, x, d_y, d_x, length, "w")
     print_board(board)
 
-    if detect_row(board, "w", 0, x, length, d_y, d_x) == (1,0):
-        print("TEST CASE for detect_row PASSED")
+    if detect_row(board, "w", 0, x, 3, d_y, d_x) == (1,0):
+        print("TEST CASE 1 for detect_row PASSED")
     else:
-        print("TEST CASE for detect_row FAILED")
+        print("TEST CASE 1 for detect_row FAILED")
 
     #---------------------------------------------------------------
     # Test Case 2
@@ -24,9 +24,9 @@ def test_detect_row():
     print_board(board)
 
     if detect_row(board, "w", 0, 0, length, d_y, d_x) == (0, 1):
-        print("TEST CASE for detect_row PASSED")
+        print("TEST CASE 2 for detect_row PASSED")
     else:
-        print("TEST CASE for detect_row FAILED")
+        print("TEST CASE 2 for detect_row FAILED")
 
     #---------------------------------------------------------------
     # Test Case 3
@@ -37,9 +37,9 @@ def test_detect_row():
     print_board(board)
 
     if detect_row(board, "w", 0, 0, length, d_y, d_x) == (0, 0):
-        print("TEST CASE for detect_row PASSED")
+        print("TEST CASE 3 for detect_row PASSED")
     else:
-        print("TEST CASE for detect_row FAILED")
+        print("TEST CASE 3 for detect_row FAILED")
 
     #---------------------------------------------------------------
     # Test Case 4
@@ -54,9 +54,9 @@ def test_detect_row():
     print_board(board)
 
     if detect_row(board, "w", 0, 0, 4, 1, 1) == (0, 1):
-        print("TEST CASE for detect_row PASSED")
+        print("TEST CASE 4 for detect_row PASSED")
     else:
-        print("TEST CASE for detect_row FAILED")
+        print("TEST CASE 4 for detect_row FAILED")
 
     #---------------------------------------------------------------
     # Test Case 5
@@ -77,9 +77,9 @@ def test_detect_row():
     print_board(board)
 
     if detect_row(board, "w", 0, 0, 4, 1, 1) == (0, 0):
-        print("TEST CASE for detect_row PASSED")
+        print("TEST CASE 5 for detect_row PASSED")
     else:
-        print("TEST CASE for detect_row FAILED")
+        print("TEST CASE 5 for detect_row FAILED")
 
     #---------------------------------------------------------------
     # Test Case 6
@@ -97,9 +97,9 @@ def test_detect_row():
     print_board(board)
 
     if detect_row(board, "w", 0, 0, 3, 1, 1) == (0, 2):
-        print("TEST CASE for detect_row PASSED")
+        print("TEST CASE 6 for detect_row PASSED")
     else:
-        print("TEST CASE for detect_row FAILED")
+        print("TEST CASE 6 for detect_row FAILED")
 
     #---------------------------------------------------------------
     # Test Case 7
@@ -117,9 +117,103 @@ def test_detect_row():
     print_board(board)
 
     if detect_row(board, "w", 0, 0, 3, 1, 1) == (1, 1):
-        print("TEST CASE for detect_row PASSED")
+        print("TEST CASE 7 for detect_row PASSED")
     else:
-        print("TEST CASE for detect_row FAILED")
+        print("TEST CASE 7 for detect_row FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 8
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 1, 1, 1, 0, 2, "w")
+    put_seq_on_board(board, 4, 1, 1, 0, 3, "w")
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w", 0, 1, 2, 1, 0) == (1, 0):
+        print("TEST CASE 8 for detect_row PASSED")
+    else:
+        print("TEST CASE 8 for detect_row FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 9
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 1, 2, 1, 1, 2, "w")
+    put_seq_on_board(board, 4, 5, 1, 1, 2, "w")
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w", 0, 1, 2, 1, 1) == (2, 0):
+        print("TEST CASE 9 for detect_row PASSED")
+    else:
+        print("TEST CASE 9 for detect_row FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 10
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 0, 1, 1, 1, 2, "w")
+    put_seq_on_board(board, 4, 5, 1, 1, 3, "w")
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w", 0, 1, 3, 1, 1) == (0, 1):
+        print("TEST CASE 10 for detect_row PASSED")
+    else:
+        print("TEST CASE 10 for detect_row FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 11
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 0, 1, 1, 1, 2, "w")
+    put_seq_on_board(board, 4, 5, 1, 1, 3, "w")
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w", 0, 1, 2, 1, 1) == (0, 1):
+        print("TEST CASE 11 for detect_row PASSED")
+    else:
+        print("TEST CASE 11 for detect_row FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 12
+    board = make_empty_board(10)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 2, 6, 1, -1, 3, "w")
+    put_seq_on_board(board, 6, 2, 1, -1, 2, "w")
+    put_seq_on_board(board, 5, 3, 1, -1, 1, "b")
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w", 0, 8, 3, 1, -1) == (0, 1):
+        print("TEST CASE 12 for detect_row PASSED")
+    else:
+        print("TEST CASE 12 for detect_row FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 13
+    board = make_empty_board(10)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 2, 6, 1, -1, 3, "w")
+    put_seq_on_board(board, 6, 2, 1, -1, 3, "w")
+    put_seq_on_board(board, 5, 3, 1, -1, 1, "b")
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w", 0, 8, 3, 1, -1) == (0, 1):
+        print("TEST CASE 13 for detect_row PASSED")
+    else:
+        print("TEST CASE 13 for detect_row FAILED")
+
+
 
 def test_is_bounded():
     # Test case 1
@@ -270,6 +364,6 @@ def test_is_empty():
         print("TEST CASE for is_empty FAILED")
 
 if __name__ == '__main__':
-    test_is_empty()
-    test_is_bounded()
+    # test_is_empty()
+    # test_is_bounded()
     test_detect_row()
