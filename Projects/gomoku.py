@@ -89,9 +89,6 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     if row[-length:] == [col]*length and row[-length - 1] != col:
         instances[-length] = 1
 
-    print(row)
-    print(instances)
-
     # is_bounded(board, y_end, x_end, length, d_y, d_x)
     for i in range(len(instances)):
         if instances[i] == 1:
@@ -105,61 +102,7 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
                 semis += 1
      
     return (opens, semis)
-        
-        
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    # open_seq_count, semi_open_seq_count = 0, 0
-
-    # for i in range(len(board) - length + 1):
-
-    #     valid_segment = True
-    #     for j in range(length):
-    #         if board[y_start + i*d_y + j*d_y][x_start + i*d_x + j*d_x] != col:
-    #             valid_segment = False
-    #             break
-        
-    #     if valid_segment:
-
-    #         y_end = y_start + i*d_y + length - 1
-    #         x_end = x_start + i*d_x + length - 1
-
-    #         status = is_bounded(board, y_end, x_end, length, d_y, d_x)
-    #         if status == "OPEN":
-    #             open_seq_count += 1
-    #         elif status == "SEMIOPEN":
-    #             semi_open_seq_count += 1
-
-    # return (open_seq_count, semi_open_seq_count)
-
-    
-
-        
-
-    
 def detect_rows(board, col, length):
     open_seq_count, semi_open_seq_count = 0, 0
 

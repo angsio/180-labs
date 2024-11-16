@@ -213,6 +213,23 @@ def test_detect_row():
     else:
         print("TEST CASE 13 for detect_row FAILED")
 
+    #---------------------------------------------------------------
+    # Test Case 13
+    board = make_empty_board(12)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 6, 0, 0, 1, 3, "w")
+    put_seq_on_board(board, 6, 4, 0, 1, 2, "w")
+    put_seq_on_board(board, 6, 7, 0, 1, 3, "w")
+    put_seq_on_board(board, 6, 3, 0, 1, 1, "b")
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w", 6, 0, 3, 0, 1) == (1, 0):
+        print("TEST CASE 13 for detect_row PASSED")
+    else:
+        print("TEST CASE 13 for detect_row FAILED")
+
 
 
 def test_is_bounded():
