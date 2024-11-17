@@ -262,6 +262,7 @@ def test_detect_row():
     else:
         print("TEST CASE 16 for detect_row FAILED")
 
+    #----------------------------------------------------------
     # Test Case 17
     board = make_empty_board(8)
 
@@ -277,6 +278,23 @@ def test_detect_row():
         print("TEST CASE 17 for detect_row PASSED")
     else:
         print("TEST CASE 17 for detect_row FAILED")
+
+    #----------------------------------------------------------
+    # Test Case 18
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 0, 5, 1, -1, 2, "w")
+    put_seq_on_board(board, 2, 3, 0, 1, 1, "b")
+    put_seq_on_board(board, 3, 2, 1, -1, 2, "w")
+    
+
+    print_board(board)
+    # detect_row(board, col, y_start, x_start, length, d_y, d_x)
+    if detect_row(board, "w_c", 0, 5, 2, 1, -1) == (0, 1, 1):
+        print("TEST CASE 188 for detect_row PASSED")
+    else:
+        print("TEST CASE 18 for detect_row FAILED")
 
 def test_is_bounded():
     # Test case 1
@@ -454,6 +472,70 @@ def test_is_bounded():
     else:
         print("TEST CASE 10 for is_bounded FAILED")
 
+    #---------------------------------------------------------------
+    # Test Case 11
+    board = make_empty_board(8)
+    # put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    put_seq_on_board(board, 0, 0, 1, 1, 4, "w")
+
+    print_board(board)
+    
+    y_end = 4
+    x_end = 4
+
+    if is_bounded(board, y_end, x_end, 4, 1, 1) == 'SEMIOPEN':
+        print("TEST CASE 11 for is_bounded PASSED")
+    else:
+        print("TEST CASE 11 for is_bounded FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 12
+    board = make_empty_board(8)
+    # put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    put_seq_on_board(board, 1, 0, 1, 1, 4, "w")
+
+    print_board(board)
+    
+    y_end = 5
+    x_end = 4
+
+    if is_bounded(board, y_end, x_end, 4, 1, 1) == 'SEMIOPEN':
+        print("TEST CASE 12 for is_bounded PASSED")
+    else:
+        print("TEST CASE 12 for is_bounded FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 13
+    board = make_empty_board(8)
+    # put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    put_seq_on_board(board, 0, 3, 1, -1, 4, "w")
+
+    print_board(board)
+    
+    y_end = 3
+    x_end = 0
+
+    if is_bounded(board, y_end, x_end, 4, 1, -1) == 'CLOSED':
+        print("TEST CASE 13 for is_bounded PASSED")
+    else:
+        print("TEST CASE 13 for is_bounded FAILED")
+
+    #---------------------------------------------------------------
+    # Test Case 14
+    board = make_empty_board(8)
+    # put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    put_seq_on_board(board, 0, 3, 1, 1, 4, "w")
+
+    print_board(board)
+    
+    y_end = 3
+    x_end = 6
+
+    if is_bounded(board, y_end, x_end, 4, 1, 1) == 'SEMIOPEN':
+        print("TEST CASE 14 for is_bounded PASSED")
+    else:
+        print("TEST CASE 14 for is_bounded FAILED")
+
 def test_is_empty():
     board  = make_empty_board(8)
     if is_empty(board):
@@ -538,11 +620,106 @@ def test_detect_rows():
     else:
         print("TEST CASE 5 for detect_rows FAILED")
 
+    #---------------------------------------
+    # TEST CASE 5
+    board = make_empty_board(8)
     
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 0, 5, 1, 0, 4, "w")
+    put_seq_on_board(board, 0, 6, 1, 0, 5, "b")
+
+    print_board(board)
+
+    if detect_rows(board, "b", 5) == (0, 1):
+        print("TEST CASE 5 for detect_rows PASSED")
+    else:
+        print("TEST CASE 5 for detect_rows FAILED")
+
+    #---------------------------------------
+    # TEST CASE 6
+    board = make_empty_board(8)
     
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 0, 0, 1, 1, 5, "b")
+    put_seq_on_board(board, 5, 5, 1, 1, 2, "w")
+
+    print_board(board)
+
+    if detect_rows(board, "b", 5) == (0, 0):
+        print("TEST CASE 6 for detect_rows PASSED")
+    else:
+        print("TEST CASE 6 for detect_rows FAILED")
+
+    #---------------------------------------
+    # TEST CASE 7
+    board = make_empty_board(8)
+    
+    # put_seq_on_board(board, y, x, d_y, d_x, length, "w")
+    put_seq_on_board(board, 0, 0, 1, 1, 5, "b")
+    put_seq_on_board(board, 5, 5, 1, 1, 2, "w")
+
+    print_board(board)
+
+    if detect_rows(board, "b_c", 5) == (0, 0, 1):
+        print("TEST CASE 7 for detect_rows PASSED")
+    else:
+        print("TEST CASE 7 for detect_rows FAILED")
+
+def test_search_max():
+    # ------------------------------------
+    # TEST CASE 1
+    board = make_empty_board(8)
+    x = 5; y = 0; d_x = 0; d_y = 1; length = 4; col = 'w'
+    put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    x = 6; y = 0; d_x = 0; d_y = 1; length = 4; col = 'b'
+    put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    print_board(board)
+    if search_max(board) == (4,6):
+        print("TEST CASE 1 for search_max PASSED")
+    else:
+        print("TEST CASE 1 for search_max FAILED") 
+
+    # ------------------------------------
+    # TEST CASE 2
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    put_seq_on_board(board, 1, 1, 1, 1, 4, "b")
+    put_seq_on_board(board, 5, 5, 1, 1, 2, "w")
+
+    print_board(board)
+    if search_max(board) == (0, 0):
+        print("TEST CASE 2 for search_max PASSED")
+    else:
+        print("TEST CASE 2 for search_max FAILED")
+
+    # ------------------------------------
+    # TEST CASE 3
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    put_seq_on_board(board, 1, 1, 1, 1, 4, "b")
+    put_seq_on_board(board, 5, 5, 1, 1, 1, "w")
+    put_seq_on_board(board, 1, 0, 1, 0, 4, "w")
+    put_seq_on_board(board, 5, 0, 1, 1, 1, "b")
+
+    print_board(board)
+    if search_max(board) == (0, 0):
+        print("TEST CASE 3 for search_max PASSED")
+    else:
+        print("TEST CASE 3 for search_max FAILED")     
+    
+def test_score():
+    board = make_empty_board(8)
+    put_seq_on_board(board, 0, 0, 1, 1, 3, "w")
+    print(score(board))
+
+    print_board(board)
 
 if __name__ == '__main__':
     # test_is_empty()
     # test_is_bounded()
-    test_detect_row()
+    # test_detect_row()
     # test_detect_rows()
+    test_search_max()
+    # test_score()

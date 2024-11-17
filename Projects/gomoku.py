@@ -52,12 +52,15 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
         return "SEMIOPEN"
     else:
         return "CLOSED"
-
-
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     # available tools: is bounded
-    opens, semis = 0, 0
+    opens, semis, closeds = 0, 0, 0
+
+    return_closed = False
+    if col == "b_c" or col == "w_c":
+        return_closed = True
+        col = col[0]
 
     row = []
     for i in range(len(board)):
@@ -74,8 +77,6 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     # instances is the row to be checked for sequences.
     instances = [0]*len(row)
 
-    # print(row)
-
     chain = False
     for i in range(1, len(row) - length):
         if chain == False and row[i + length] != col and row[i - 1] != col:
@@ -85,13 +86,11 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
         else:
             if row[i + length - 1] != col:
                 chain = False
-    
-    if row[:length] == [col]*length and row[length] != col:
-        instances[0] = 1
-    if row[-length:] == [col]*length and row[-length - 1] != col:
-        instances[-length] = 1
 
-    # print(instances)
+    if row[:length] == [col]*length and (length == len(row) or row[length] != col):
+        instances[0] = 1
+    if row[-length:] == [col]*length and (length == len(row) or row[-length - 1] != col):
+        instances[-length] = 1
 
     # is_bounded(board, y_end, x_end, length, d_y, d_x)
     for i in range(len(instances)):
@@ -99,61 +98,113 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
             # 4, 4
             y_end = y_start + length*d_y + (i - 1)*d_y
             x_end = x_start + length*d_x + (i - 1)*d_x
-            # print(y_end, x_end)
+            
             res = is_bounded(board, y_end, x_end, length, d_y, d_x)
-            # print(res)
             if res == "OPEN":
                 opens += 1
             elif res == "SEMIOPEN":
                 semis += 1
-     
-    return (opens, semis)
+            else:
+                closeds += 1
+
+    if return_closed:
+        return (opens, semis, closeds)
+    else:
+        return (opens, semis)
 
 def detect_rows(board, col, length):
-    open_seq_count, semi_open_seq_count = 0, 0
+    open_seq_count, semi_open_seq_count, closeds = 0, 0, 0
+
+    return_closed = False
+    if col == "b_c" or col == "w_c":
+        return_closed = True
 
     # detect_row(board, col, y_start, x_start, length, d_y, d_x)
     for row in range(len(board)):
-        row_counts = detect_row(board, col, row, 0, length, 0, 1)
-        open_seq_count += row_counts[0]
-        semi_open_seq_count += row_counts[1]
+        row1_counts = detect_row(board, col, row, 0, length, 0, 1)
+
+        open_seq_count += row1_counts[0]
+        semi_open_seq_count += row1_counts[1]
+        if return_closed:
+            closeds += row1_counts[2]
     
     # detect_row(board, col, y_start, x_start, length, d_y, d_x)
     for column in range(len(board[0])):
-        row_counts = detect_row(board, col, 0, column, length, 1, 0)
-        open_seq_count += row_counts[0]
-        semi_open_seq_count += row_counts[1]
+        row2_counts = detect_row(board, col, 0, column, length, 1, 0)
+        open_seq_count += row2_counts[0]
+        semi_open_seq_count += row2_counts[1]
+        if return_closed:
+            closeds += row2_counts[2]
 
     # detect_row(board, col, y_start, x_start, length, d_y, d_x)
     for i in range(-len(board) + 2, len(board[0]) - 1):
 
         if i <= 0:
-            row_counts = detect_row(board, col, abs(i), 0, length, 1, 1)
-            open_seq_count += row_counts[0]
-            semi_open_seq_count += row_counts[1]
+            row3_counts = detect_row(board, col, abs(i), 0, length, 1, 1)
+            open_seq_count += row3_counts[0]
+            semi_open_seq_count += row3_counts[1]
+            if return_closed:
+                closeds += row3_counts[2]
         else:
-            row_counts = detect_row(board, col, 0, abs(i), length, 1, 1)
-            open_seq_count += row_counts[0]
-            semi_open_seq_count += row_counts[1]
+            row4_counts = detect_row(board, col, 0, abs(i), length, 1, 1)
+            open_seq_count += row4_counts[0]
+            semi_open_seq_count += row4_counts[1]
+            if return_closed:
+                closeds += row4_counts[2]
 
     # detect_row(board, col, y_start, x_start, length, d_y, d_x)
     for i in range(1, len(board) - 1):
-        row1_counts = detect_row(board, col, 0, i, length, 1, -1)
-        open_seq_count += row1_counts[0]
-        semi_open_seq_count += row1_counts[1]
+        row5_counts = detect_row(board, col, 0, i, length, 1, -1)
+        open_seq_count += row5_counts[0]
+        semi_open_seq_count += row5_counts[1]
+        if return_closed:
+            closeds += row5_counts[2]
 
-        row2_counts = detect_row(board, col, i, len(board) - 1, length, 1, -1)
-        open_seq_count += row2_counts[0]
-        semi_open_seq_count += row2_counts[1]
+        row6_counts = detect_row(board, col, i, len(board) - 1, length, 1, -1)
+        open_seq_count += row6_counts[0]
+        semi_open_seq_count += row6_counts[1]
+        if return_closed:
+            closeds += row6_counts[2]
 
     extra = detect_row(board, col, 0, len(board[0]) - 1, length, 1, -1)
     open_seq_count += extra[0]
     semi_open_seq_count += extra[1]
 
-    return open_seq_count, semi_open_seq_count
+    if return_closed:
+        closeds += extra[2]
+        return (open_seq_count, semi_open_seq_count, closeds)
+    else:
+        return (open_seq_count, semi_open_seq_count)
     
 def search_max(board):
-    return move_y, move_x
+    possible_moves = []
+
+    for row in range(len(board)):
+        for colu in range(len(board[0])):
+            if board[row][colu] == " ":
+                possible_moves.append((row, colu))
+
+    preferred_move = ()
+    high_score = 0
+    for coord in possible_moves:
+
+        prev_item = board[coord[0]][coord[1]]
+        board[coord[0]][coord[1]] = "b"
+
+        o, s, c = detect_rows(board, "b_c", 5)
+
+        if c >= 1:
+            board[coord[0]][coord[1]] = prev_item
+            preferred_move = (coord[0], coord[1])
+            break
+
+        elif score(board) >= high_score:
+            high_score = score(board)
+            preferred_move = (coord[0], coord[1])
+
+        board[coord[0]][coord[1]] = prev_item
+
+    return preferred_move
     
 def score(board):
     MAX_SCORE = 100000
@@ -166,8 +217,7 @@ def score(board):
     for i in range(2, 6):
         open_b[i], semi_open_b[i] = detect_rows(board, "b", i)
         open_w[i], semi_open_w[i] = detect_rows(board, "w", i)
-        
-    
+
     if open_b[5] >= 1 or semi_open_b[5] >= 1:
         return MAX_SCORE
     
@@ -182,14 +232,29 @@ def score(board):
             50   * open_b[3]                     + 
             10   * semi_open_b[3]                +  
             open_b[2] + semi_open_b[2] - open_w[2] - semi_open_w[2])
-
     
 def is_win(board):
-    pass
+    open_w, semi_w, closed_w = detect_rows(board, "w_c", 5)
+    open_b, semi_b, closed_b = detect_rows(board, "b_c", 5)
+
+    full = True
+    for row in range(len(board)):
+        for colu in range(len(board[0])):
+            if board[row][colu] == " ":
+                full = False
+    
+    if open_b >= 1 or semi_b >= 1 or closed_b >= 1:
+        return "Black won"
+    elif open_w >= 1 or semi_w >= 1 or closed_w >= 1:
+        return "White won"
+    elif full:
+        return "Draw"
+    else:
+        return "Continue playing"
+        
 
 
 def print_board(board):
-    
     s = "*"
     for i in range(len(board[0])-1):
         s += str(i%10) + "|"
@@ -217,7 +282,7 @@ def analysis(board):
     for c, full_name in [["b", "Black"], ["w", "White"]]:
         print("%s stones" % (full_name))
         for i in range(2, 6):
-            open, semi_open = detect_rows(board, c, i);
+            open, semi_open = detect_rows(board, c, i)
             print("Open rows of length %d: %d" % (i, open))
             print("Semi-open rows of length %d: %d" % (i, semi_open))
         
@@ -261,25 +326,6 @@ def put_seq_on_board(board, y, x, d_y, d_x, length, col):
         board[y][x] = col        
         y += d_y
         x += d_x
-
-def test_search_max():
-    board = make_empty_board(8)
-    x = 5; y = 0; d_x = 0; d_y = 1; length = 4; col = 'w'
-    put_seq_on_board(board, y, x, d_y, d_x, length, col)
-    x = 6; y = 0; d_x = 0; d_y = 1; length = 4; col = 'b'
-    put_seq_on_board(board, y, x, d_y, d_x, length, col)
-    print_board(board)
-    if search_max(board) == (4,6):
-        print("TEST CASE for search_max PASSED")
-    else:
-        print("TEST CASE for search_max FAILED")
-
-def easy_testset_for_main_functions():
-    test_is_empty()
-    test_is_bounded()
-    test_detect_row()
-    test_detect_rows()
-    test_search_max()
 
 def some_tests():
     board = make_empty_board(8)
