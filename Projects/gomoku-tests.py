@@ -708,6 +708,22 @@ def test_search_max():
         print("TEST CASE 3 for search_max PASSED")
     else:
         print("TEST CASE 3 for search_max FAILED")     
+
+    # ------------------------------------
+    # TEST CASE 4
+    board = make_empty_board(8)
+
+    # put_seq_on_board(board, y, x, d_y, d_x, length, col)
+    put_seq_on_board(board, 1, 6, 1, -1, 4, "b")
+    put_seq_on_board(board, 3, 2, 1, 0, 4, "w")
+    # put_seq_on_board(board, 1, 0, 1, 0, 4, "w")
+    # put_seq_on_board(board, 5, 0, 1, 1, 1, "b")
+
+    print_board(board)
+    if search_max(board) == (0, 7):
+        print("TEST CASE 4 for search_max PASSED")
+    else:
+        print("TEST CASE 4 for search_max FAILED")
     
 def test_score():
     board = make_empty_board(8)

@@ -57,9 +57,9 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     # available tools: is bounded
     opens, semis, closeds = 0, 0, 0
 
-    return_closed = False
+    return_closed_c = False
     if col == "b_c" or col == "w_c":
-        return_closed = True
+        return_closed_c = True
         col = col[0]
 
     row = []
@@ -107,18 +107,18 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
             else:
                 closeds += 1
 
-    if return_closed:
+    if return_closed_c:
         return (opens, semis, closeds)
     else:
         return (opens, semis)
-
+    
 def detect_rows(board, col, length):
     open_seq_count, semi_open_seq_count, closeds = 0, 0, 0
 
     return_closed = False
     if col == "b_c" or col == "w_c":
         return_closed = True
-
+    
     # detect_row(board, col, y_start, x_start, length, d_y, d_x)
     for row in range(len(board)):
         row1_counts = detect_row(board, col, row, 0, length, 0, 1)
@@ -175,7 +175,7 @@ def detect_rows(board, col, length):
         return (open_seq_count, semi_open_seq_count, closeds)
     else:
         return (open_seq_count, semi_open_seq_count)
-    
+
 def search_max(board):
     possible_moves = []
 
@@ -184,26 +184,19 @@ def search_max(board):
             if board[row][colu] == " ":
                 possible_moves.append((row, colu))
 
-    preferred_move = ()
+    preferred_move = (possible_moves[0])
     high_score = 0
-    for coord in possible_moves:
+    for i in range(len(possible_moves)):
 
-        prev_item = board[coord[0]][coord[1]]
-        board[coord[0]][coord[1]] = "b"
+        prev_item = board[possible_moves[i][0]][possible_moves[i][1]]
+        board[possible_moves[i][0]][possible_moves[i][1]] = "b"
 
-        o, s, c = detect_rows(board, "b_c", 5)
-
-        if c >= 1:
-            board[coord[0]][coord[1]] = prev_item
-            preferred_move = (coord[0], coord[1])
-            break
-
-        elif score(board) >= high_score:
+        if score(board) >= high_score:
             high_score = score(board)
-            preferred_move = (coord[0], coord[1])
+            preferred_move = possible_moves[i]
 
-        board[coord[0]][coord[1]] = prev_item
-
+        board[possible_moves[i][0]][possible_moves[i][1]] = prev_item
+        
     return preferred_move
     
 def score(board):
